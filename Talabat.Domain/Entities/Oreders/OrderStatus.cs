@@ -2,7 +2,7 @@
 {
     public enum OrderStatus
     {
-        pending = 1,
+        Pending = 1,
         PaymentReceived = 2,
         PaymentFailed = 3
     }
