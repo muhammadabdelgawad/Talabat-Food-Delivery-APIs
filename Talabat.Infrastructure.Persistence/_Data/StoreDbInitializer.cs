@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using Talabat.Domain.Contracts.Presistence.DbIntializers;
-using Talabat.Domain.Entities.Products;
 using Talabat.Infrastructure.Persistence.Common;
 
 namespace Talabat.Infrastructure.Persistence._Data

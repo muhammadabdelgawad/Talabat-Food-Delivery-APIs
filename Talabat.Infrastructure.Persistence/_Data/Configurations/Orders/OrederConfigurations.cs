@@ -1,4 +1,4 @@
-﻿namespace Talabat.Infrastructure.Persistence._Data.Configurations.Products
+﻿namespace Talabat.Infrastructure.Persistence._Data.Configurations.Orders
 {
     public class OrederConfigurations :BaseEntityConfigurations<Order,int>
     {
