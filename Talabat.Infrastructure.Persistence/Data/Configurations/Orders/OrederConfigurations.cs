@@ -14,7 +14,7 @@
                     (status) => (OrderStatus)Enum.Parse(typeof(OrderStatus), status)
                 );
 
-            builder.Property(o => o.OrderDate)
+            builder.Property(o => o.Subtotal)
                 .HasColumnType("decimal(8,2)");
 
             builder.HasOne(o => o.DeliveryMethod)

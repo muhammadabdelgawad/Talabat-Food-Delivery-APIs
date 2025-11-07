@@ -1,6 +1,8 @@
-﻿namespace Talabat.Infrastructure.Persistence.Data.Configurations.Base
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+
+namespace Talabat.Infrastructure.Persistence.Data.Configurations.Base
 {
-  // [DbContextType(typeof(StoreDbContext))]
+   [DbContext(typeof(StoreDbContext))]
     public class BaseEntityConfigurations<TEntity,Tkey> : IEntityTypeConfiguration<TEntity>
         where TEntity: BaseEntity<Tkey>
         where Tkey : IEquatable<Tkey>

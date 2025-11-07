@@ -1,4 +1,5 @@
 ﻿using Talabat.Domain.Entities.Identity;
+using Address = Talabat.Domain.Entities.Identity.Address;
 
 namespace Talabat.Infrastructure.Persistence._Identity.Configurations
 {

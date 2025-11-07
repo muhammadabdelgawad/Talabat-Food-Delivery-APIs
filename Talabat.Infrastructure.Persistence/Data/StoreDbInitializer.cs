@@ -48,6 +48,19 @@ namespace Talabat.Infrastructure.Persistence._Data
                 }
 
             }
+
+            if (!_dbContext.DeliveryMethods.Any())
+            {
+                var deliveryData = File.ReadAllText("../Talabat.Infrastructure.Persistence/Data/Seeds/delivery.json");
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+
+                if (deliveryMethods?.Count > 0)
+                {
+                    await _dbContext.Set<DeliveryMethod>().AddRangeAsync(deliveryMethods);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+            }
         }
     }
 }
