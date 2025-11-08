@@ -77,9 +77,10 @@ namespace Talabat.Application.Services.Order
             return mapper.Map<OrderToReturnDto>(order);
         }
 
-        public Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodAsync()
+        public async Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodAsync()
         {
-            
+            var deliveryMethodRepo= await unitOfWork.GetRepositiry<DeliveryMethod,int>().GetAllAsync();
+            return mapper.Map<IEnumerable<DeliveryMethodDto>>(deliveryMethodRepo);
         }
 
 
