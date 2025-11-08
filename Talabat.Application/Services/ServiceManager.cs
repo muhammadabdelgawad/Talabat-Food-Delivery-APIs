@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Talabat.Application.Abstraction.Services;
-using Talabat.Application.Abstraction.Services.Auth;
-using Talabat.Application.Abstraction.Services.Basket;
-using Talabat.Application.Abstraction.Services.Products;
-using Talabat.Application.Services.Products;
-using Talabat.Domain.Contracts.Presistence.UnitOfWork;
-namespace Talabat.Application.Services
+﻿namespace Talabat.Application.Services
 {
     public class ServiceManager : IServiceManager
     {

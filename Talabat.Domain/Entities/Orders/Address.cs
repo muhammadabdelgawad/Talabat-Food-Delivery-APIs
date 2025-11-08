@@ -1,8 +1,8 @@
-﻿namespace Talabat.Application.Abstraction.Models.Common
+﻿
+namespace Talabat.Domain.Entities.Oreders
 {
-    public class AddressDto
+    public class Address
     {
-     
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public required string Street { get; set; }

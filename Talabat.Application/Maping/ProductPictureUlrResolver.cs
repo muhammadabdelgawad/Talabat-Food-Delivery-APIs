@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Talabat.Application.Abstraction.DTOs.Products;
-using Talabat.Domain.Entities.Products;
-
-namespace Talabat.Application.Maping
+﻿namespace Talabat.Application.Maping
 {
-    internal class ProductPictureUlrResolver(IConfiguration configuration) : IValueResolver<Product, ProductToReturnDto, string?>
+    public class ProductPictureUrlResolver : IValueResolver<Product, ProductToReturnDto, string?>
     {
-      
+        private readonly IConfiguration configuration;
+        public ProductPictureUrlResolver(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
 
         public string? Resolve(Product source, ProductToReturnDto destination, string? destMember, ResolutionContext context)
         {

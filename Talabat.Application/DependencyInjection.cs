@@ -16,7 +16,7 @@ namespace Talabat.Application
             
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
             services.AddScoped(typeof(IServiceManager), typeof(ServiceManager));
-            services.AddScoped<ProductPictureUlrResolver>();
+            services.AddScoped<ProductPictureUrlResolver>();
 
             services.AddScoped(typeof(IBasketService), typeof(BasketService));
             services.AddScoped(typeof(Func<IBasketService>), sp =>

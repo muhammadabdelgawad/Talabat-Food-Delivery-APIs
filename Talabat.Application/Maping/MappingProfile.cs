@@ -1,22 +1,13 @@
-﻿using AutoMapper;
-using Talabat.Application.Abstraction.DTOs.Products;
-using Talabat.Application.Abstraction.Models.Basket;
-using Talabat.Application.Abstraction.Models.Common;
-using Talabat.Application.Abstraction.Models.Products;
-using Talabat.Domain.Entities.Basket;
-using Talabat.Domain.Entities.Identity;
-using Talabat.Domain.Entities.Products;
-
-namespace Talabat.Application.Maping
+﻿namespace Talabat.Application.Maping
 {
-    internal class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile() 
         {
             CreateMap<Product, ProductToReturnDto>()
                   .ForMember(d => d.Brand, O => O.MapFrom(src => src.Brand!.Name))
                   .ForMember(d => d.Category, O => O.MapFrom(src => src.Category!.Name))
-                  .ForMember(d => d.PictureUrl, O => O.MapFrom<ProductPictureUlrResolver>());   
+                  .ForMember(d => d.PictureUrl, O => O.MapFrom<ProductPictureUrlResolver>());   
             CreateMap<ProductBrand, BrandDto>();
             CreateMap<ProductCategory, CategoryDto>();
 
@@ -25,8 +16,17 @@ namespace Talabat.Application.Maping
 
             CreateMap<Domain.Entities.Identity.Address, AddressDto>().ReverseMap();
 
+            CreateMap<Order, OrderToReturnDto>()
+                .ForMember(dest => dest.DeliveryMethod, options => options.MapFrom(src => src.DeliveryMethod!.ShortName));
 
+            CreateMap<OrderItem, OrderItemDto>()
+                .ForMember(dest => dest.ProductId, options => options.MapFrom(src => src.Product.Id))
+                .ForMember(dest => dest.ProductName, options => options.MapFrom(src => src.Product.Name))
+                .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
+            
+            CreateMap<Domain.Entities.Identity.Address, AddressDto>();
+
+            CreateMap<DeliveryMethod, DeliveryMethodDto>();
         }
     }
 }
- 
