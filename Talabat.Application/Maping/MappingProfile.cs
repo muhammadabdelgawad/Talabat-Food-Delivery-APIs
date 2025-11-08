@@ -1,4 +1,6 @@
-﻿namespace Talabat.Application.Maping
+﻿using Talabat.Domain.Entities.Orders;
+
+namespace Talabat.Application.Maping
 {
     public class MappingProfile : Profile
     {

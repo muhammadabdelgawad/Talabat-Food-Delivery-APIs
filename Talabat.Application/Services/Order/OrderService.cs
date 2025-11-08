@@ -1,5 +1,6 @@
 ﻿using Talabat.Domain.Entities.Orders;
-using Address = Talabat.Domain.Entities.Oreders.Address; 
+using Talabat.Domain.Specifications.Order;
+using Address = Talabat.Domain.Entities.Oreders.Address;
 
 namespace Talabat.Application.Services.Order
 {
@@ -57,20 +58,30 @@ namespace Talabat.Application.Services.Order
             return mapper.Map<OrderToReturnDto>(orderToCreate);
 
         }
+        
+        public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
+        {
+            var orderSpec = new OrderSpecifications(buyerEmail);
+            var orders=  await unitOfWork.GetRepositiry<Domain.Entities.Orders.Order,int>()
+                                       .GetAllWithSpecAsync(orderSpec);
+            return mapper.Map<IEnumerable<OrderToReturnDto>>(orders);
+
+        }
+      
+        public async Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
+        {
+            var orderSpec = new OrderSpecifications(buyerEmail, orderId);
+            var order= await unitOfWork .GetRepositiry<Domain.Entities.Orders.Order,int>()
+                                       .GetWithSpecAsync(orderSpec);
+            if(order is null) throw new NotFoundException(nameof(order) ,orderId);
+            return mapper.Map<OrderToReturnDto>(order);
+        }
 
         public Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodAsync()
         {
-            throw new NotImplementedException();
+            
         }
 
-        public Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
