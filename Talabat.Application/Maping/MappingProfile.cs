@@ -25,6 +25,8 @@
                 .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
             
             CreateMap<Domain.Entities.Identity.Address, AddressDto>();
+
+            CreateMap<DeliveryMethod, DeliveryMethodDto>();
         }
     }
 }
