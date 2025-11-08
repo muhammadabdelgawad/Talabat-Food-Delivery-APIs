@@ -1,15 +1,6 @@
-﻿using AutoMapper;
-using Talabat.Application.Abstraction.DTOs.Products;
-using Talabat.Application.Abstraction.Models.Basket;
-using Talabat.Application.Abstraction.Models.Common;
-using Talabat.Application.Abstraction.Models.Products;
-using Talabat.Domain.Entities.Basket;
-using Talabat.Domain.Entities.Identity;
-using Talabat.Domain.Entities.Products;
-
-namespace Talabat.Application.Maping
+﻿namespace Talabat.Application.Maping
 {
-    internal class MappingProfile : Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile() 
         {
@@ -24,6 +15,10 @@ namespace Talabat.Application.Maping
             CreateMap<BasketItem, BasketItemDto>().ReverseMap();
 
             CreateMap<Domain.Entities.Identity.Address, AddressDto>().ReverseMap();
+
+            CreateMap<Order, OrderToReturnDto>()
+                .ForMember(dest => dest.DeliveryMethod, options => options.MapFrom(src => src.DeliveryMethod!.ShortName));
+
 
 
         }

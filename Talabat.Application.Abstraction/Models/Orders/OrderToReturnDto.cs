@@ -11,11 +11,8 @@ namespace Talabat.Application.Abstraction.Models.Orders
 
         public int? DeliveryMethodId { get; set; }
         public string ? DeliveryMethod { get; set; }
-        public virtual ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>();
+        public virtual required ICollection<OrderItemDto> Items { get; set; }
         public decimal Subtotal { get; set; }
-
-        public decimal GetTotal() => Subtotal + DeliveryMethod!.Cost;
-
-        public string PaymentIntentId { get; set; } = "";
+        public decimal Total { get; set; }   
     }
 }

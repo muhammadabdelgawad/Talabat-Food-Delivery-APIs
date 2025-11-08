@@ -1,12 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
-using Talabat.Application.Abstraction.Models.Basket;
-using Talabat.Application.Abstraction.Services.Basket;
-using Talabat.Application.Exceptions;
-using Talabat.Domain.Contracts.Infrastructure;
-using Talabat.Domain.Entities.Basket;
-
-namespace Talabat.Infrastructure.Persistence.Repositories.Baskets
+﻿namespace Talabat.Infrastructure.Persistence.Repositories.Baskets
 {
     public class BasketService(IBasketRepository basketRepository, IMapper mapper, IConfiguration configuration) : IBasketService
     {

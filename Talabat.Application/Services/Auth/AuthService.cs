@@ -1,16 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Talabat.Application.Abstraction.Models.Auth;
-using Talabat.Application.Abstraction.Models.Common;
-using Talabat.Application.Abstraction.Services.Auth;
-using Talabat.Application.Exceptions;
-using Talabat.Application.Extensions;
-using Talabat.Domain.Entities.Identity;
+﻿using Address = Talabat.Domain.Entities.Identity.Address;
 
 namespace Talabat.Application.Services.Auth
  {
