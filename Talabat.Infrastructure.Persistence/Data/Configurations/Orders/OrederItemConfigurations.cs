@@ -1,4 +1,6 @@
-﻿namespace Talabat.Infrastructure.Persistence._Data.Configurations.Orders
+﻿using Talabat.Domain.Entities.Orders;
+
+namespace Talabat.Infrastructure.Persistence._Data.Configurations.Orders
 {
     public class OrederItemConfigurations : BaseEntityConfigurations<OrderItem, int>
 

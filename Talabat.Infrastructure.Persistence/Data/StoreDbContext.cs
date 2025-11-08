@@ -1,4 +1,6 @@
-﻿namespace Talabat.Infrastructure.Persistence.Data
+﻿using Talabat.Domain.Entities.Orders;
+
+namespace Talabat.Infrastructure.Persistence.Data
 {
     public class StoreDbContext : DbContext
     {

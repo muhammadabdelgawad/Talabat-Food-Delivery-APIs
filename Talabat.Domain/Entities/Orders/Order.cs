@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Talabat.Domain.Entities.Oreders
+﻿
+namespace Talabat.Domain.Entities.Orders
 {
     public class Order : BaseAuditableEntity<int>
     {

@@ -1,4 +1,4 @@
-﻿namespace Talabat.Domain.Entities.Oreders
+﻿namespace Talabat.Domain.Entities.Orders
 {
     public class ProductItemOrdered
     {

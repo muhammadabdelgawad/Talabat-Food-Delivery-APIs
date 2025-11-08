@@ -27,3 +27,5 @@ global using Talabat.Domain.Contracts.Presistence.UnitOfWork;
 global using Talabat.Domain.Specifications.Products;
 global using Talabat.Application.Abstraction.Services;
 global using Talabat.Application.Services.Products;
+global using Talabat.Application.Abstraction.Services.Orders;
+ 
