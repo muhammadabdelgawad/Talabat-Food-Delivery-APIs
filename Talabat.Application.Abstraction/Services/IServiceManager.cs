@@ -1,11 +1,8 @@
-﻿using Talabat.Application.Abstraction.Services.Auth;
-using Talabat.Application.Abstraction.Services.Basket;
-using Talabat.Application.Abstraction.Services.Products;
-
-namespace Talabat.Application.Abstraction.Services
+﻿namespace Talabat.Application.Abstraction.Services
 {
     public interface IServiceManager
     {
+        public IOrderService OrderService { get; } 
         public IProductService ProductService { get; } 
         public IBasketService BasketService { get; } 
         public IAuthService AuthService { get; } 
