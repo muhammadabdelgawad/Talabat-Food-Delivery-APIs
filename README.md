@@ -159,7 +159,3 @@ The API is self-documenting using Swagger UI, which is available in development 
 ## License Information
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact/Support Information
-
-For any questions or support, please contact muhammadabdelgawad at [insert contact info here].
