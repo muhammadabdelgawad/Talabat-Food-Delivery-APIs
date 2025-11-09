@@ -42,13 +42,16 @@ namespace Talabat.Application.Services.Order
 
             var address= mapper.Map<Address>(order.ShippingAddress);
 
+            var deliveryMethod= await unitOfWork.GetRepositiry<DeliveryMethod,int>()
+                                            .GetAsync(order.DeliveryMethodId);
+
             var orderToCreate = new Domain.Entities.Orders.Order()
             {
                 BuyerEmail = buyerEmail,
                 ShippingAddress = address,
-                DeliveryMethodId = order.DeliveryMethodId,
                 Items = orderItems,
-                Subtotal = subTotal
+                Subtotal = subTotal,
+                DeliveryMethod = deliveryMethod
             };
             await unitOfWork.GetRepositiry<Domain.Entities.Orders.Order,int>().AddAsync(orderToCreate);
 
