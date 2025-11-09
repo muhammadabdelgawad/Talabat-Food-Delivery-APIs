@@ -1,5 +1,5 @@
 ﻿using Talabat.Domain.Entities.Orders;
-using Address = Talabat.Domain.Entities.Oreders.Address;
+
 
 namespace Talabat.Application.Maping
 {
@@ -17,7 +17,7 @@ namespace Talabat.Application.Maping
             CreateMap<Basket, BasketDto>().ReverseMap();
             CreateMap<BasketItem, BasketItemDto>().ReverseMap();
 
-            CreateMap<Domain.Entities.Identity.Address, AddressDto>().ReverseMap();
+            CreateMap<UserAddress, AddressDto>().ReverseMap();
 
             CreateMap<Order, OrderToReturnDto>()
                 .ForMember(dest => dest.DeliveryMethod, options => options.MapFrom(src => src.DeliveryMethod!.ShortName));
@@ -27,7 +27,7 @@ namespace Talabat.Application.Maping
                 .ForMember(dest => dest.ProductName, options => options.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
             
-            CreateMap<AddressDto, Address>();
+            CreateMap<Address, AddressDto>().ReverseMap();
 
             CreateMap<DeliveryMethod, DeliveryMethodDto>();
         }

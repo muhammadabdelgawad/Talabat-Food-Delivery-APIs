@@ -1,6 +1,6 @@
 ﻿using Talabat.Domain.Entities.Orders;
 using Talabat.Domain.Specifications.Order;
-using Address = Talabat.Domain.Entities.Oreders.Address;
+using Address = Talabat.Domain.Entities.Orders.Address; 
 
 namespace Talabat.Application.Services.Order
 {

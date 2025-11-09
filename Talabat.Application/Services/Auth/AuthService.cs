@@ -1,4 +1,4 @@
-﻿using Address = Talabat.Domain.Entities.Identity.Address;
+﻿using UserAddress = Talabat.Domain.Entities.Identity.UserAddress;
 
 namespace Talabat.Application.Services.Auth
  {
@@ -136,7 +136,7 @@ namespace Talabat.Application.Services.Auth
 
         public async Task<AddressDto> UpdateUserAddressAsync(ClaimsPrincipal claimsPrincipal, AddressDto addressDto)
         {
-            var updatedAddress = mapper.Map<Address>(addressDto);
+            var updatedAddress = mapper.Map<UserAddress>(addressDto);
 
             var user = await  userManager.FindUserWithAddress(claimsPrincipal);
 

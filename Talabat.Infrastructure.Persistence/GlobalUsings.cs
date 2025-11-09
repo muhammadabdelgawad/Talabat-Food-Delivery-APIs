@@ -12,3 +12,6 @@ global using Talabat.Domain.Contracts.Presistence.UnitOfWork;
 global using Talabat.Infrastructure.Persistence._Data;
 global using Talabat.Infrastructure.Persistence._Identity;
 global using Talabat.Domain.Entities.Products;
+global using Microsoft.AspNetCore.Identity;
+global using Talabat.Domain.Entities.Identity;
+global using Talabat.Infrastructure.Persistence.Common;

@@ -28,7 +28,7 @@ namespace Talabat.Infrastructure.Persistence.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Talabat.Domain.Entities.Identity.Address", b =>
+            modelBuilder.Entity("Talabat.Domain.Entities.Identity.UserAddress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -367,11 +367,11 @@ namespace Talabat.Infrastructure.Persistence.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Talabat.Domain.Entities.Identity.Address", b =>
+            modelBuilder.Entity("Talabat.Domain.Entities.Identity.UserAddress", b =>
                 {
                     b.HasOne("Talabat.Domain.Entities.Identity.ApplicationUser", "User")
-                        .WithOne("Address")
-                        .HasForeignKey("Talabat.Domain.Entities.Identity.Address", "UserId")
+                        .WithOne("UserAddress")
+                        .HasForeignKey("Talabat.Domain.Entities.Identity.UserAddress", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,7 +385,7 @@ namespace Talabat.Infrastructure.Persistence.Data.Migrations
                         .HasForeignKey("DeliveryMethodId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.OwnsOne("Talabat.Domain.Entities.Oreders.Address", "ShippingAddress", b1 =>
+                    b.OwnsOne("Talabat.Domain.Entities.Oreders.UserAddress", "ShippingAddress", b1 =>
                         {
                             b1.Property<int>("OrderId")
                                 .HasColumnType("int");
@@ -478,7 +478,7 @@ namespace Talabat.Infrastructure.Persistence.Data.Migrations
 
             modelBuilder.Entity("Talabat.Domain.Entities.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("UserAddress");
                 });
 
             modelBuilder.Entity("Talabat.Domain.Entities.Oreders.Order", b =>

@@ -1,5 +1,5 @@
 ﻿using Talabat.Domain.Entities.Identity;
-using Address = Talabat.Domain.Entities.Identity.Address;
+using UserAddress = Talabat.Domain.Entities.Identity.UserAddress;
 
 namespace Talabat.Infrastructure.Persistence._Identity.Configurations
 {
@@ -16,7 +16,7 @@ namespace Talabat.Infrastructure.Persistence._Identity.Configurations
 
             builder.HasOne(u => u.Address)
                 .WithOne(a => a.User)
-                .HasForeignKey<Address>(a => a.UserId)
+                .HasForeignKey<UserAddress>(a => a.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.ToTable("Users");

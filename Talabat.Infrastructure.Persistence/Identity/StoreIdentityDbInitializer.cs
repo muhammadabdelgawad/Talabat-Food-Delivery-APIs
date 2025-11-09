@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Talabat.Domain.Contracts.Presistence.DbIntializers;
-using Talabat.Domain.Entities.Identity;
-using Talabat.Infrastructure.Persistence.Common;
-
-namespace Talabat.Infrastructure.Persistence._Identity
+﻿namespace Talabat.Infrastructure.Persistence._Identity
 {
     public class StoreIdentityDbInitializer(StoreIdentityDbConetxt _dbContext ,UserManager<ApplicationUser> _userManager) : DbInitializer(_dbContext), IStoreIdentityInializer
     {
