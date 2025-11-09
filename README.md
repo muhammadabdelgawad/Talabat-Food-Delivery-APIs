@@ -1,6 +1,6 @@
 # Talabat Food Delivery APIs
 
-This repository contains the APIs for a Talabat-like food delivery application.
+This repository contains the APIs for a Talabat Food Delivery Application.
 
 ## Features and Functionality
 
