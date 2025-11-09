@@ -9,4 +9,5 @@ global using Talabat.Application.Abstraction.DTOs.Products;
 global using Talabat.Application.Abstraction.Models.Products;
 global using Talabat.Application.Abstraction.Models.Auth;
 global using Talabat.Application.Abstraction.Models.Common;
+global using System.Security.Claims;
 

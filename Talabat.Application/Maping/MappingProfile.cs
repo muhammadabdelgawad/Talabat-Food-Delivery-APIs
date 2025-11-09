@@ -1,4 +1,5 @@
 ﻿using Talabat.Domain.Entities.Orders;
+using Address = Talabat.Domain.Entities.Oreders.Address;
 
 namespace Talabat.Application.Maping
 {
@@ -26,7 +27,7 @@ namespace Talabat.Application.Maping
                 .ForMember(dest => dest.ProductName, options => options.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
             
-            CreateMap<Domain.Entities.Identity.Address, AddressDto>();
+            CreateMap<AddressDto, Address>();
 
             CreateMap<DeliveryMethod, DeliveryMethodDto>();
         }
