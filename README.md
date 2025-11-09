@@ -1,160 +1,165 @@
-# Talabat Delivery APIs
+# Talabat Food Delivery APIs
 
-## Project Description
-
-This repository contains the APIs for Talabat's delivery services, providing endpoints for managing products, categories, brands, user accounts, shopping baskets, and order processing. It leverages .NET 8, Entity Framework Core, and ASP.NET Core to create a robust and scalable backend solution.
+This repository contains the APIs for a Talabat-like food delivery application.
 
 ## Features and Functionality
 
 *   **Product Management:**
-    *   Retrieve a paginated list of products with filtering and sorting options.
-    *   Fetch a single product by its ID.
-    *   Get lists of product brands and categories.
-*   **Account Management:**
-    *   User registration and login.
-    *   Retrieve and update the current user's information and address.
-    *   Check if an email address is already registered.
+    *   Browse a paginated list of products with filtering and sorting options (name, price, brand, category).
+    *   Retrieve a specific product by its ID.
+    *   List available brands and categories.
 *   **Basket Management:**
-    *   Retrieve, update, and delete customer baskets.
+    *   Retrieve, update, and delete customer baskets using a unique basket ID.
+*   **Account Management:**
+    *   Register new users with display name, username, email, phone number, and password.
+    *   Login existing users using email and password.
+    *   Retrieve current user information (requires authentication).
+    *   Retrieve and update user address information (requires authentication).
+    *   Check if an email address already exists.
 *   **Order Management:**
-    *   Create new orders.
-    *   Retrieve order history for a user.
-    *   Fetch an order by ID.
-    *   Get available delivery methods.
+    *   Create new orders for authenticated users based on a basket ID and shipping address.
+    *   Retrieve orders for a specific user (requires authentication).
+    *   Retrieve a specific order by its ID (requires authentication).
+    *   List available delivery methods.
 *   **Error Handling:**
-    *   Comprehensive error handling with standardized API responses.
-    *   Custom exception middleware for handling application-specific exceptions.
+    *   Comprehensive error handling using custom `ApiResponse` objects for various status codes (400, 401, 404, 500).
+    *   Custom exception middleware to handle exceptions like `NotFoundException`, `ValidationException`, `BadRequestException`, and `UnAuthorizedException`.
+    *   Model state validation for API requests.
 *   **Authentication and Authorization:**
     *   JWT-based authentication for securing API endpoints.
-    *   Role-based authorization for controlling access to specific resources.
+    *   Role-based authorization is possible but not implemented in the provided files.
+    *   Configuration of JWT settings via `jwtSettings` section in `appsettings.json` or similar.
 
 ## Technology Stack
 
-*   .NET 8
-*   ASP.NET Core 8
-*   Entity Framework Core
-*   SQL Server
-*   Redis (for basket management)
-*   AutoMapper
-*   Swashbuckle/Swagger (for API documentation)
+*   **.NET 9.0:**  (Inferred from the project structure and namespaces)
+*   **ASP.NET Core Web API:** For building RESTful APIs.
+*   **Entity Framework Core:**  ORM for database interactions (SQL Server).
+*   **Microsoft.AspNetCore.Identity:**  For identity and access management.
+*   **StackExchange.Redis:**  For basket management.
+*   **AutoMapper:** For object-to-object mapping.
+*   **JWT (JSON Web Tokens):** For authentication.
+*   **SQL Server:** Relational database for product, order and identity information.
 
 ## Prerequisites
 
-Before you begin, ensure you have met the following requirements:
-
-*   .NET 8 SDK installed: [Download .NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
-*   SQL Server instance:  (SQL Server Express LocalDB is suitable for development)
-*   Redis server:  Install and configure a Redis server.
-*   An IDE such as Visual Studio or VS Code.
+*   .NET SDK 9.0 or later.
+*   SQL Server instance.
+*   Redis server instance.
 
 ## Installation Instructions
 
 1.  **Clone the repository:**
 
     ```bash
-    git clone https://github.com/muhammadabdelgawad/Talabat-Delivery-APIs.git
-    cd Talabat-Delivery-APIs
+    git clone https://github.com/muhammadabdelgawad/Talabat-Food-Delivery-APIs.git
+    cd Talabat-Food-Delivery-APIs
     ```
 
-2.  **Update Database Connection Strings:**
+2.  **Configure Database Connections:**
 
-    *   Open `Talabat.APIs/appsettings.json` and `Talabat.APIs/appsettings.Development.json`.
-    *   Modify the `StoreConnection` connection string to point to your SQL Server instance:
+    *   Modify the connection strings in `Talabat.APIs/appsettings.json` (or `appsettings.Development.json`) for both `StoreConnection` (for product and order data) and `IdentityConnection` (for user data):
 
         ```json
-        "ConnectionStrings": {
-          "StoreConnection": "Server=your_server;Database=TalabatStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
-          "IdentityConnection": "Server=your_server;Database=TalabatIdentityDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
-          "Redis": "localhost"
+        {
+          "ConnectionStrings": {
+            "StoreConnection": "Server=YOUR_SERVER;Database=TalabatStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true",
+            "IdentityConnection": "Server=YOUR_SERVER;Database=TalabatIdentityDB;Trusted_Connection=True;MultipleActiveResultSets=true",
+            "Redis": "localhost"
+          },
+          // ... rest of settings
         }
         ```
 
-        Replace `your_server` with your SQL Server instance name.
-    *   Modify the `IdentityConnection` similarly to point to a different Database for Identity
-    *   Configure the Redis connection string as needed. Default is `localhost`.
+        Replace `YOUR_SERVER` with the actual server address of your SQL Server instance. If you are using SQL Express on your local machine, it is usually `(localdb)\MSSQLLocalDB`.
 
-3.  **Apply Database Migrations:**
+        Ensure that Redis server is running and accessible. If not, configure the host in the `Redis` connection string.
 
-    *   Open a command prompt in the `Talabat.Infrastructure.Persistence` directory.
-    *   Run the following commands to create and update the databases:
+3.  **Apply Migrations:**
 
-        ```bash
-        dotnet ef database update -c StoreDbContext
-        dotnet ef database update -c StoreIdentityDbConetxt
-        ```
+    Open a terminal in the `Talabat.Infrastructure.Persistence` directory and run the following commands:
 
-4.  **Configure JWT Settings:**
+    ```bash
+    dotnet ef database update -c StoreDbContext
+    dotnet ef database update -c StoreIdentityDbConetxt
+    ```
+    These commands will create the necessary databases and tables based on the Entity Framework Core models.
 
-    *  Update `Talabat.APIs/appsettings.json` or `Talabat.APIs/appsettings.Development.json` with appropriate JWT settings.
+4.  **Run the Application:**
 
-        ```json
-        "jwtSettings": {
-            "key": "YourSecretKeyForJWTAuthentication",
-            "Audience": "https://localhost:7070",
-            "Issuer": "https://localhost:7070",
-            "DurationInMinutes": 60
-          }
-        ```
+    Navigate to the `Talabat.APIs` directory and run the application:
 
-    *   Replace `"YourSecretKeyForJWTAuthentication"` with a strong, randomly generated secret key. Adjust Issuer and Audience if necessary.
-
-5.  **Initialize the Database**
-
-    *The Application automatically initializes the databases, there is nothing to do.*
+    ```bash
+    dotnet run
+    ```
 
 ## Usage Guide
 
-1.  **Run the Application:**
+The API endpoints can be accessed through tools like Postman, Swagger UI, or any HTTP client.  By default, the application will run on `https://localhost:5001`.  Swagger UI is enabled in development mode, which can be accessed by browsing to `https://localhost:5001/swagger`.
 
-    *   Navigate to the `Talabat.APIs` directory in your command prompt.
-    *   Execute the following command:
+### Authentication
 
-        ```bash
-        dotnet run
-        ```
+The `AccountController` provides endpoints for user registration and login.  Successful login will return a `UserDto` containing a JWT token. This token must be included in the `Authorization` header (Bearer scheme) for accessing protected endpoints.
 
-2.  **Access the API Documentation:**
+### Products
 
-    *   Open your web browser and navigate to `https://localhost:7070/swagger` (or the appropriate URL based on your launch settings).
-    *   This will display the Swagger UI, where you can explore the available endpoints and test the APIs.
+*   `GET /api/Products`: Retrieves a paginated list of products.  Query parameters can be used to filter, sort, and paginate the results.
+    *   `sort`: Sorting criteria (e.g., `priceAsc`, `priceDesc`).
+    *   `brandId`: Filter by brand ID.
+    *   `categoryId`: Filter by category ID.
+    *   `pageIndex`: Page number.
+    *   `pageSize`: Number of items per page.
+    *   `search`: Search term for product name.
+*   `GET /api/Products/{id}`: Retrieves a specific product by its ID.
+*   `GET /api/Products/brands`: Retrieves all product brands.
+*   `GET /api/Products/categories`: Retrieves all product categories.
 
-3.  **Example API Usage (Products):**
+### Basket
 
-    *   **Get all products (paginated):** `GET /api/Products?pageIndex=1&pageSize=10`
-    *   **Get a specific product:** `GET /api/Products/{id}`  (e.g., `GET /api/Products/1`)
-    *   **Get all brands:** `GET /api/Products/brands`
-    *   **Get all categories:** `GET /api/Products/categories`
+*   `GET /api/Basket?id={id}`: Retrieves a customer basket by its ID.
+*   `POST /api/Basket`: Updates a customer basket.  The request body should contain a `BasketDto`.
+*   `DELETE /api/Basket?id={id}`: Deletes a customer basket by its ID.
 
-4.  **Authentication:**
+### Account
 
-    *   Register a new user using the `POST /api/Account/register` endpoint, providing the required details (DisplayName, UserName, Email, PhoneNumber, Password).
-    *   Login using `POST /api/Account/login` with your email and password.  The API will return a JWT token.
-    *   Include the JWT token in the `Authorization` header of subsequent requests that require authentication (e.g., `Authorization: Bearer <your_jwt_token>`).
+*   `POST /api/Account/register`: Registers a new user. The request body should contain a `RegisterDto`.
+*   `POST /api/Account/login`: Logs in an existing user. The request body should contain a `LoginDto`.
+*   `GET /api/Account`: Retrieves the current user. Requires authentication.
+*   `GET /api/Account/address`: Retrieves the user's address. Requires authentication.
+*   `PUT /api/Account/address`: Updates the user's address. The request body should contain an `AddressDto`. Requires authentication.
+*   `GET /api/Account/emailexisits?email={email}`: Checks if an email exists.
+
+### Orders
+
+*   `POST /api/Orders`: Creates a new order. The request body should contain an `OrderToCreateDto`. Requires authentication.
+*   `GET /api/Orders`: Retrieves orders for the authenticated user. Requires authentication.
+*   `GET /api/Orders/{id}`: Retrieves a specific order by ID for the authenticated user. Requires authentication.
+*   `GET /api/Orders/delivery`: Retrieves all delivery methods.
+
+### Example API Request (Get Products)
+
+```
+GET https://localhost:5001/api/Products?pageSize=10&pageIndex=1&sort=priceAsc&brandId=2
+```
+
+This request retrieves the first page of products (10 items per page), sorted by price in ascending order, and filtered by brand ID 2.
 
 ## API Documentation
 
-A comprehensive API documentation is available via Swagger UI at `https://localhost:7070/swagger` after running the application.  Refer to Swagger for detailed information on request parameters, response formats, and authentication requirements for each endpoint.
-
-**Key Endpoints:**
-
-*   `/api/Account`: User registration, login, and management.
-*   `/api/Products`: Product retrieval and listing.
-*   `/api/Basket`: Basket management.
-*   `/api/Orders`: Order creation, retrieval, and management.
-*   `/api/Buggy`: Endpoints used for testing Error Handling and API Response codes, for testing purposes only.
-*   `/Errors/{Code}`: Endpoint used to test Error Handling responses from server.
+The API is self-documenting using Swagger UI, which is available in development environments.  Browse to `https://localhost:5001/swagger` after running the application.
 
 ## Contributing Guidelines
 
-We welcome contributions to this project. Please follow these guidelines:
-
 1.  Fork the repository.
 2.  Create a new branch for your feature or bug fix.
-3.  Implement your changes, ensuring code quality and adherence to coding standards.
-4.  Write appropriate unit tests.
+3.  Implement your changes and write appropriate tests.
+4.  Ensure that all tests pass.
 5.  Submit a pull request with a clear description of your changes.
 
 ## License Information
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## Contact/Support Information
+
+For any questions or support, please contact muhammadabdelgawad at [insert contact info here].
