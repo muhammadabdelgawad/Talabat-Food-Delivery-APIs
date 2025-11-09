@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using Talabat.APIs.Controllers.Base;
-using Talabat.Application.Abstraction.Models.Auth;
-using Talabat.Application.Abstraction.Models.Common;
-using Talabat.Application.Abstraction.Services;
-
+﻿
 namespace Talabat.APIs.Controllers.Controllers.Account
 {
     public class AccountController(IServiceManager serviceManager) :BaseApiController

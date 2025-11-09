@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Talabat.APIs.Controllers.Base;
-using Talabat.Application.Abstraction.Common;
-using Talabat.Application.Abstraction.DTOs.Products;
-using Talabat.Application.Abstraction.Models.Products;
-using Talabat.Application.Abstraction.Services;
-
+﻿
 namespace Talabat.APIs.Controllers.Controllers.Products
 {
     public class ProductsController(IServiceManager serviceManager) : BaseApiController()
