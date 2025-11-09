@@ -161,7 +161,7 @@ namespace Talabat.Infrastructure.Persistence._Identity.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Talabat.Domain.Entities.Identity.Address", b =>
+            modelBuilder.Entity("Talabat.Domain.Entities.Identity.UserAddress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -327,11 +327,11 @@ namespace Talabat.Infrastructure.Persistence._Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Talabat.Domain.Entities.Identity.Address", b =>
+            modelBuilder.Entity("Talabat.Domain.Entities.Identity.UserAddress", b =>
                 {
                     b.HasOne("Talabat.Domain.Entities.Identity.ApplicationUser", "User")
-                        .WithOne("Address")
-                        .HasForeignKey("Talabat.Domain.Entities.Identity.Address", "UserId")
+                        .WithOne("UserAddress")
+                        .HasForeignKey("Talabat.Domain.Entities.Identity.UserAddress", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -340,7 +340,7 @@ namespace Talabat.Infrastructure.Persistence._Identity.Migrations
 
             modelBuilder.Entity("Talabat.Domain.Entities.Identity.ApplicationUser", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("UserAddress");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Talabat.Application.Abstraction.Services;
-
-namespace Talabat.APIs.Controllers.Base
+﻿namespace Talabat.APIs.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,13 +1,13 @@
 ﻿
-using Address = Talabat.Domain.Entities.Identity.Address;
+using UserAddress = Talabat.Domain.Entities.Identity.UserAddress;
 
 namespace Talabat.Infrastructure.Persistence._Identity.Configurations
 {
-    public class AddressConfigurations : IEntityTypeConfiguration<Address>
+    public class AddressConfigurations : IEntityTypeConfiguration<UserAddress>
     {
-        public void Configure(EntityTypeBuilder<Address> builder)
+        public void Configure(EntityTypeBuilder<UserAddress> builder)
         {
-            builder.Property(nameof(Address.Id)).ValueGeneratedOnAdd();
+            builder.Property(nameof(UserAddress.Id)).ValueGeneratedOnAdd();
 
             builder.Property(a => a.FirstName)
                    .HasColumnType("nvarchar")

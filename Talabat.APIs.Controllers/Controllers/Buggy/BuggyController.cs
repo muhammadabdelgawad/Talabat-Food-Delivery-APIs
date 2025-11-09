@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Talabat.APIs.Controllers.Base;
-using Talabat.APIs.Controllers.Errors;
-using Talabat.Application.Abstraction.Services;
-
+﻿
 namespace Talabat.APIs.Controllers.Controllers.Buggy
 {
     public class BuggyController : BaseApiController

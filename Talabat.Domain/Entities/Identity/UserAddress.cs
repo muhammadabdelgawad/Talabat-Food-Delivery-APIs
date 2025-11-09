@@ -1,6 +1,6 @@
 ﻿namespace Talabat.Domain.Entities.Identity
 {
-    public class Address
+    public class UserAddress
     {
         public int Id { get; set; }
         public required string FirstName { get; set; }

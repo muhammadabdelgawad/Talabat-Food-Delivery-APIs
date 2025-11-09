@@ -1,5 +1,6 @@
 ﻿using Talabat.Domain.Entities.Orders;
-using Address = Talabat.Domain.Entities.Oreders.Address; 
+using Talabat.Domain.Specifications.Order;
+using Address = Talabat.Domain.Entities.Orders.Address; 
 
 namespace Talabat.Application.Services.Order
 {
@@ -41,13 +42,16 @@ namespace Talabat.Application.Services.Order
 
             var address= mapper.Map<Address>(order.ShippingAddress);
 
+            var deliveryMethod= await unitOfWork.GetRepositiry<DeliveryMethod,int>()
+                                            .GetAsync(order.DeliveryMethodId);
+
             var orderToCreate = new Domain.Entities.Orders.Order()
             {
                 BuyerEmail = buyerEmail,
                 ShippingAddress = address,
-                DeliveryMethodId = order.DeliveryMethodId,
                 Items = orderItems,
-                Subtotal = subTotal
+                Subtotal = subTotal,
+                DeliveryMethod = deliveryMethod
             };
             await unitOfWork.GetRepositiry<Domain.Entities.Orders.Order,int>().AddAsync(orderToCreate);
 
@@ -57,20 +61,31 @@ namespace Talabat.Application.Services.Order
             return mapper.Map<OrderToReturnDto>(orderToCreate);
 
         }
-
-        public Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodAsync()
+        
+        public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var orderSpec = new OrderSpecifications(buyerEmail);
+            var orders=  await unitOfWork.GetRepositiry<Domain.Entities.Orders.Order,int>()
+                                       .GetAllWithSpecAsync(orderSpec);
+            return mapper.Map<IEnumerable<OrderToReturnDto>>(orders);
+
+        }
+      
+        public async Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
+        {
+            var orderSpec = new OrderSpecifications(buyerEmail, orderId);
+            var order= await unitOfWork .GetRepositiry<Domain.Entities.Orders.Order,int>()
+                                       .GetWithSpecAsync(orderSpec);
+            if(order is null) throw new NotFoundException(nameof(order) ,orderId);
+            return mapper.Map<OrderToReturnDto>(order);
         }
 
-        public Task<OrderToReturnDto> GetOrderByIdAsync(string buyerEmail, int orderId)
+        public async Task<IEnumerable<DeliveryMethodDto>> GetDeliveryMethodAsync()
         {
-            throw new NotImplementedException();
+            var deliveryMethodRepo= await unitOfWork.GetRepositiry<DeliveryMethod,int>().GetAllAsync();
+            return mapper.Map<IEnumerable<DeliveryMethodDto>>(deliveryMethodRepo);
         }
 
-        public Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿namespace Talabat.Application.Maping
+﻿using Talabat.Domain.Entities.Orders;
+
+
+namespace Talabat.Application.Maping
 {
     public class MappingProfile : Profile
     {
@@ -14,7 +17,7 @@
             CreateMap<Basket, BasketDto>().ReverseMap();
             CreateMap<BasketItem, BasketItemDto>().ReverseMap();
 
-            CreateMap<Domain.Entities.Identity.Address, AddressDto>().ReverseMap();
+            CreateMap<UserAddress, AddressDto>().ReverseMap();
 
             CreateMap<Order, OrderToReturnDto>()
                 .ForMember(dest => dest.DeliveryMethod, options => options.MapFrom(src => src.DeliveryMethod!.ShortName));
@@ -24,7 +27,7 @@
                 .ForMember(dest => dest.ProductName, options => options.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.PictureUrl, options => options.MapFrom<OrderItemPictureUrlResolver>());
             
-            CreateMap<Domain.Entities.Identity.Address, AddressDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
 
             CreateMap<DeliveryMethod, DeliveryMethodDto>();
         }
