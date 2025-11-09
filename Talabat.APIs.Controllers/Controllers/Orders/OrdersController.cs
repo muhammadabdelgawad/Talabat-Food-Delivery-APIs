@@ -15,5 +15,13 @@ namespace Talabat.APIs.Controllers.Controllers.Orders
             return Ok(result);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderToReturnDto>>> GetOrdersForUser()
+        {
+            var buyerEmail = User.FindFirstValue(ClaimTypes.Email);
+
+            var result = await serviceManager.OrderService.GetOrdersForUserAsync(buyerEmail!);
+            return Ok(result);
+        }
     }
 }
