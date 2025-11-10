@@ -14,6 +14,7 @@ namespace Talabat.Infrastructure.Persistence
                                 .AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>()));
 
             services.AddScoped<IStoreDbIntializer, StoreDbInitializer>();
+            services.AddScoped(typeof(AuditInterceptor));
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork.UnitOfWork));
            
 
