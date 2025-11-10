@@ -129,6 +129,7 @@ namespace Talabat.Application.Services.Auth
         public async Task<AddressDto?> GetUserAddressAsync(ClaimsPrincipal claimsPrincipal)
         {
             var user = await userManager.FindUserWithAddress(claimsPrincipal);
+           
             var address= mapper.Map<AddressDto>(user!.Address);
               
             return address;
