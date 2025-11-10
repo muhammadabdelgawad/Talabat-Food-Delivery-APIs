@@ -1,4 +1,5 @@
 ﻿using Talabat.Application.Abstraction.Services;
+using Talabat.Infrastructure.Persistence._Data.Interceptors;
 using Talabat.Infrastructure.Persistence.Services;
 
 namespace Talabat.Infrastructure.Persistence
@@ -7,9 +8,10 @@ namespace Talabat.Infrastructure.Persistence
     {
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<StoreDbContext>(options =>
+            services.AddDbContext<StoreDbContext>((serviceProvider,options) =>
                          options.UseLazyLoadingProxies()
-                                .UseSqlServer(configuration.GetConnectionString("StoreConnection")));
+                                .UseSqlServer(configuration.GetConnectionString("StoreConnection"))
+                                .AddInterceptors(serviceProvider.GetRequiredService<AuditInterceptor>()));
 
             services.AddScoped<IStoreDbIntializer, StoreDbInitializer>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork.UnitOfWork));
