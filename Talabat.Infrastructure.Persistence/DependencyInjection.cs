@@ -1,4 +1,7 @@
-﻿namespace Talabat.Infrastructure.Persistence
+﻿using Talabat.Application.Abstraction.Services;
+using Talabat.Infrastructure.Persistence.Services;
+
+namespace Talabat.Infrastructure.Persistence
 {
     public static class DependencyInjection
     {
@@ -19,7 +22,7 @@
            
 
             services.AddScoped(typeof(IStoreIdentityInializer), typeof(StoreIdentityDbInitializer));
-           
+            services.AddScoped<ILoggedInUserService, LoggedInUserService>();
             return services;
 
         }
