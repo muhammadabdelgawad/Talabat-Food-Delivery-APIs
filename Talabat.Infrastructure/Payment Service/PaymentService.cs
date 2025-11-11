@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Stripe;
 using Talabat.Domain.Entities.Oreders;
-using Talabat.Shared.Models;
 using Product = Talabat.Domain.Entities.Products.Product;
 
 namespace Talabat.Infrastructure.Payment_Service
