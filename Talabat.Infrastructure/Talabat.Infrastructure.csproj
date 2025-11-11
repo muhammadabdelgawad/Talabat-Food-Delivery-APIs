@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talabat.Domain\Talabat.Domain.csproj" />
+    <ProjectReference Include="..\Talabat.Shared\Talabat.Shared.csproj" />
   </ItemGroup>
 
 </Project>
