@@ -6,7 +6,7 @@
         private readonly IMapper _mapper = mapper;
         private readonly IConfiguration _configuration = configuration; 
 
-        public async Task<BasketDto> GetCustomerBasket(string id)
+        public async Task<BasketDto> GetCustomerBasketAsync(string id)
         {
               var basket= await _basketRepo.GetAsync(id);
             if(basket is null) throw new NotFoundException(nameof(Basket), id);
@@ -14,7 +14,7 @@
             return mappedBasket;
         }
 
-        public async Task<BasketDto> UpdateCustomerBasket(BasketDto basket) 
+        public async Task<BasketDto> UpdateCustomerBasketAsync(BasketDto basket) 
         {
              var mappedBasket = _mapper.Map<Basket>(basket);
              var daysToLive = int.Parse(_configuration.GetSection("RedisSettings")["TimeToLiveInDays"]!);

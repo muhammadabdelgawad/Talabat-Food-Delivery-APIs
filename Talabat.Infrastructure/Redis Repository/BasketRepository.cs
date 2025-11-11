@@ -1,8 +1,5 @@
 ﻿using StackExchange.Redis;
 using System.Text.Json;
-using Talabat.Domain.Contracts.Infrastructure;
-using Talabat.Domain.Entities.Basket;
-
 namespace Talabat.Infrastructure.Redis_Repository
 {
     public class BasketRepository : IBasketRepository

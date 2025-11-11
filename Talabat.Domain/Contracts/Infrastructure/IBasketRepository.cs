@@ -1,6 +1,4 @@
-﻿
-
-namespace Talabat.Domain.Contracts.Infrastructure
+﻿namespace Talabat.Domain.Contracts.Infrastructure
 {
     public interface IBasketRepository
     {
