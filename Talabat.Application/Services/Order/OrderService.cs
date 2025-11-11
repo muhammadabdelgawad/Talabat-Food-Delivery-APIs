@@ -8,11 +8,11 @@ namespace Talabat.Application.Services.Order
     {
         public async Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, OrderToCreateDto order)
         {
-            var basket = await basketService.GetCustomerBasket(order.BasketId);
+            var basket = await basketService.GetCustomerBasketAsync(order.BasketId);
 
             var orderItems = new List<OrderItem>();
 
-            if (basket.Items.Count() > 0)
+            if (basket.Items.Count > 0)
             {
                 var productRepo= unitOfWork.GetRepositiry<Product,int>();
                 foreach (var item in basket.Items)

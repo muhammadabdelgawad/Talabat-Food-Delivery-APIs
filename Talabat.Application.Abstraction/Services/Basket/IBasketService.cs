@@ -4,8 +4,8 @@ namespace Talabat.Application.Abstraction.Services.Basket
 {
     public interface IBasketService
     {
-        Task<BasketDto> GetCustomerBasket(string id);
-        Task<BasketDto> UpdateCustomerBasket(BasketDto basket);
+        Task<BasketDto> GetCustomerBasketAsync(string id);
+        Task<BasketDto> UpdateCustomerBasketAsync(BasketDto basket);
         Task DeleteCustomerBasketAsync(string id);
 
     }
