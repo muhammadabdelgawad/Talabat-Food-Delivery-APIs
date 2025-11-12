@@ -52,7 +52,7 @@ namespace Talabat.Application.Services.Order
             if (existingOrder is not null) 
             {
                 orderRepo.Delete(existingOrder);
-                await paymentService.CreateeOrUpdatePaymentIntent(basket.Id);
+                await paymentService.CreateOrUpdatePaymentIntent(basket.Id);
             }
 
             var orderToCreate = new Domain.Entities.Orders.Order()

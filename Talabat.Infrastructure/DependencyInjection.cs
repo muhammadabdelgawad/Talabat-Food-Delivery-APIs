@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using Talabat.Infrastructure.Payment_Service;
 
 
 namespace Talabat.Infrastructure
@@ -20,6 +21,9 @@ namespace Talabat.Infrastructure
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
             services.Configure<RedisSettings>(configuration.GetSection("RedisSettings"));
+
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
+
             return services;
         }
     }
