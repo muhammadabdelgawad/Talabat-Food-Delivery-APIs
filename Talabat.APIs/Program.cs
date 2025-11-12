@@ -36,6 +36,17 @@ namespace Talabat.APIs
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(policyOptions =>
+            {
+                policyOptions.AddPolicy("TalabatPolicy", policyBuilder =>
+                {
+                    policyBuilder.AllowAnyHeader()
+                                 .AllowAnyMethod()
+                                 .AllowAnyOrigin();
+                });
+            });
+
             builder.Services.AddPersistenceServices(builder.Configuration);
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
@@ -49,7 +60,7 @@ namespace Talabat.APIs
 
             #endregion
 
-           
+
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             if (app.Environment.IsDevelopment())
@@ -60,6 +71,9 @@ namespace Talabat.APIs
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseStatusCodePagesWithReExecute("/Errors/{0}");
+
+
+            app.UseCors("TalabatPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 

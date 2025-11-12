@@ -4,14 +4,14 @@ using Address = Talabat.Domain.Entities.Orders.Address;
 
 namespace Talabat.Application.Services.Order
 {
-    public class OrderService(IMapper mapper,IBasketService basketService, IUnitOfWork unitOfWork) : IOrderService
+    public class OrderService(IMapper mapper,IBasketService basketService, IUnitOfWork unitOfWork,IPaymentService paymentService) : IOrderService
     {
         public async Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, OrderToCreateDto order)
         {
             var basket = await basketService.GetCustomerBasketAsync(order.BasketId);
 
             var orderItems = new List<OrderItem>();
-
+             
             if (basket.Items.Count > 0)
             {
                 var productRepo= unitOfWork.GetRepositiry<Product,int>();
@@ -45,15 +45,26 @@ namespace Talabat.Application.Services.Order
             var deliveryMethod= await unitOfWork.GetRepositiry<DeliveryMethod,int>()
                                             .GetAsync(order.DeliveryMethodId);
 
+            var orderSpecs = new OrderWithPaymentIntentSpecifications(basket.PaymentIntentId!);
+            var orderRepo = unitOfWork.GetRepositiry<Domain.Entities.Orders.Order, int>();
+
+            var existingOrder = await orderRepo.GetWithSpecAsync(orderSpecs);
+            if (existingOrder is not null) 
+            {
+                orderRepo.Delete(existingOrder);
+                await paymentService.CreateOrUpdatePaymentIntent(basket.Id);
+            }
+
             var orderToCreate = new Domain.Entities.Orders.Order()
             {
                 BuyerEmail = buyerEmail,
                 ShippingAddress = address,
                 Items = orderItems,
                 Subtotal = subTotal,
-                DeliveryMethod = deliveryMethod
+                DeliveryMethod = deliveryMethod,
+                PaymentIntentId = basket.PaymentIntentId!
             };
-            await unitOfWork.GetRepositiry<Domain.Entities.Orders.Order,int>().AddAsync(orderToCreate);
+            await orderRepo.AddAsync(orderToCreate);
 
             var created = await unitOfWork.CompleteAsync() > 0;
             if (!created) throw new BadRequestException("Problem in creating order");

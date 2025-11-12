@@ -1,15 +1,25 @@
 ﻿using Microsoft.Extensions.Options;
 using Stripe;
+using AutoMapper;
 using Talabat.Domain.Entities.Oreders;
 using Product = Talabat.Domain.Entities.Products.Product;
+using Talabat.Application.Abstraction.Models.Basket;
 
 namespace Talabat.Infrastructure.Payment_Service
 {
-    public class PaymentService(IOptions<RedisSettings> redisSettings,IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IPaymentService
+    public class PaymentService(IMapper mapper,
+        IBasketRepository basketRepository, 
+        IUnitOfWork unitOfWork,
+        IOptions<RedisSettings> redisSettings,
+        IOptions<StripeSettings>stripeSettings
+         ): IPaymentService
     {
         private readonly RedisSettings _redisSettings = redisSettings.Value;
-        public async Task<Basket?> CreateeOrUpdatePaymentIntent(string basketId)
+        private readonly StripeSettings _stripeSettings = stripeSettings.Value;
+        public async Task<BasketDto> CreateOrUpdatePaymentIntent(string basketId)
         {
+            StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+
             var basket = await basketRepository.GetAsync(basketId);
 
             if (basket == null) throw new Exception("Basket Not Found");
@@ -48,8 +58,8 @@ namespace Talabat.Infrastructure.Payment_Service
                 var options = new PaymentIntentCreateOptions
                 {
                     Amount = (long)basket.Items.Sum(item => item.Quantity * (item.Price * 100)) + (long)(basket.ShippingPrice * 100),
-                    Currency = "USD",
-                    PaymentMethodTypes = new List<string> { "Card" }
+                    Currency = "usd",
+                    PaymentMethodTypes = new List<string> { "card" }
                 };
 
                 paymentIntent = await paymentIntentService.CreateAsync(options);
@@ -71,7 +81,7 @@ namespace Talabat.Infrastructure.Payment_Service
            
             await basketRepository.UpdateAsync(basket,TimeSpan.FromDays(_redisSettings.TimeToLiveInDays));
 
-            return basket;
+            return mapper.Map<BasketDto>(basket);
         }
     }
 }

@@ -13,9 +13,9 @@
             AddIncludes();
             AddOrderByDesc(order => order.OrderDate);
         }
-        
-            
-       private protected override void AddIncludes()
+       
+
+        private protected override void AddIncludes()
         {
             Includes.Add(o => o.DeliveryMethod!);
             Includes.Add(o => o.Items);

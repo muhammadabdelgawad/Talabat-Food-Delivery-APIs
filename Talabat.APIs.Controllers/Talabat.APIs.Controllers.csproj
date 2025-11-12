@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Talabat.Application.Abstraction\Talabat.Application.Abstraction.csproj" />
+    <ProjectReference Include="..\Talabat.Domain\Talabat.Domain.csproj" />
   </ItemGroup>
 
 </Project>
