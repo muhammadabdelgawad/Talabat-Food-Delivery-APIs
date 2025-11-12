@@ -7,7 +7,12 @@ using Talabat.Application.Abstraction.Models.Basket;
 
 namespace Talabat.Infrastructure.Payment_Service
 {
-    public class PaymentService(IMapper mapper,IOptions<RedisSettings> redisSettings,IBasketRepository basketRepository, IUnitOfWork unitOfWork) : IPaymentService
+    public class PaymentService(IMapper mapper,
+        IBasketRepository basketRepository, 
+        IUnitOfWork unitOfWork,
+        IOptions<RedisSettings> redisSettings,
+        IOptions<StripeSettings>stripeSettings
+         ): IPaymentService
     {
         private readonly RedisSettings _redisSettings = redisSettings.Value;
         public async Task<BasketDto> CreateOrUpdatePaymentIntent(string basketId)
