@@ -14,5 +14,6 @@ namespace Talabat.Application.Abstraction.Models.Orders
         public virtual required ICollection<OrderItemDto> Items { get; set; }
         public decimal Subtotal { get; set; }
         public decimal Total { get; set; }   
+        public string PaymentIntentId { get; set; }   
     }
 }

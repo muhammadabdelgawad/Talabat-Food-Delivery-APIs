@@ -15,8 +15,11 @@ namespace Talabat.Infrastructure.Payment_Service
          ): IPaymentService
     {
         private readonly RedisSettings _redisSettings = redisSettings.Value;
+        private readonly StripeSettings _stripeSettings = stripeSettings.Value;
         public async Task<BasketDto> CreateOrUpdatePaymentIntent(string basketId)
         {
+            StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
+
             var basket = await basketRepository.GetAsync(basketId);
 
             if (basket == null) throw new Exception("Basket Not Found");
@@ -55,8 +58,8 @@ namespace Talabat.Infrastructure.Payment_Service
                 var options = new PaymentIntentCreateOptions
                 {
                     Amount = (long)basket.Items.Sum(item => item.Quantity * (item.Price * 100)) + (long)(basket.ShippingPrice * 100),
-                    Currency = "USD",
-                    PaymentMethodTypes = new List<string> { "Card" }
+                    Currency = "usd",
+                    PaymentMethodTypes = new List<string> { "card" }
                 };
 
                 paymentIntent = await paymentIntentService.CreateAsync(options);
