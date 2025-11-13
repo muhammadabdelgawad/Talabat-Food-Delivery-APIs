@@ -12,16 +12,24 @@
         }
         public async Task<IActionResult> Index()
         {
-            var Users = await _userManager.Users.Select(u => new UserViewModel
-            {
-                Id = u.Id,
-                UserName = u.UserName,
-                Email = u.Email,
-                DisplayName = u.DisplayName,
-                Roles = _userManager.GetRolesAsync(u).Result
-            }).ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
 
-            return View(Users);
+            var userViewModels = new List<UserViewModel>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userViewModels.Add(new UserViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    DisplayName = user.DisplayName,
+                    Roles = roles
+                });
+            }
+
+            return View(userViewModels);
         }
 
         public async Task<IActionResult> Edit(string id)
