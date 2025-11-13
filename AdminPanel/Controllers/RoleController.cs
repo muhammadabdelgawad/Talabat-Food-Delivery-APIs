@@ -2,15 +2,15 @@
 {
     public class RoleController : Controller
     {
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RoleController(RoleManager<IdentityRole> roleManager)
         {
-            this.roleManager = roleManager;
+            _roleManager = roleManager;
         }
         public async Task<IActionResult> Index()
         {
-            var Roles = await roleManager.Roles.ToListAsync();
+            var Roles = await _roleManager.Roles.ToListAsync();
             return View(Roles);
         }
 
@@ -19,16 +19,16 @@
         {
             if (ModelState.IsValid)
             {
-                var RoleExsits = await roleManager.RoleExistsAsync(model.Name);
+                var RoleExsits = await _roleManager.RoleExistsAsync(model.Name);
                 if (!RoleExsits)
                 {
-                    await roleManager.CreateAsync(new IdentityRole(model.Name.Trim()));
-                    return RedirectToAction(nameof(Index), await roleManager.Roles.ToListAsync());
+                    await _roleManager.CreateAsync(new IdentityRole(model.Name.Trim()));
+                    return RedirectToAction(nameof(Index), await _roleManager.Roles.ToListAsync());
                 }
                 else
                 {
                     ModelState.AddModelError("Name", "Role Is Exists");
-                    return View(nameof(Index), await roleManager.Roles.ToListAsync());
+                    return View(nameof(Index), await _roleManager.Roles.ToListAsync());
 
 
                 }
@@ -38,14 +38,14 @@
 
         public async Task<IActionResult> Delete(string id)
         {
-            var role = await roleManager.FindByIdAsync(id);
-            await roleManager.DeleteAsync(role);
+            var role = await _roleManager.FindByIdAsync(id);
+            await _roleManager.DeleteAsync(role);
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(string id)
         {
-            var role = await roleManager.FindByIdAsync(id);
+            var role = await _roleManager.FindByIdAsync(id);
             var mappedRole = new RoleViewModel()
             {
                 Name = role.Name
@@ -59,19 +59,19 @@
         {
             if (ModelState.IsValid)
             {
-                var RoleExsits = await roleManager.RoleExistsAsync(model.Name);
+                var RoleExsits = await _roleManager.RoleExistsAsync(model.Name);
                 if (!RoleExsits)
                 {
-                    var role = await roleManager.FindByIdAsync(model.Id);
+                    var role = await _roleManager.FindByIdAsync(model.Id);
                     role.Name = model.Name;
-                    await roleManager.UpdateAsync(role);
+                    await _roleManager.UpdateAsync(role);
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
                     ModelState.AddModelError("Name", "Role Is Exists");
-                    return View(nameof(Index), await roleManager.Roles.ToListAsync());
+                    return View(nameof(Index), await _roleManager.Roles.ToListAsync());
 
 
                 }

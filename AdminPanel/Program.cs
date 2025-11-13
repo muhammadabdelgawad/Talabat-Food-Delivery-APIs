@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Talabat.Domain.Entities.Identity;
-using Talabat.Infrastructure.Persistence._Identity;
-using Talabat.Infrastructure.Persistence.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +24,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

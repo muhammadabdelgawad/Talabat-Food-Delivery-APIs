@@ -3,23 +3,23 @@ namespace AdminPanel.Controllers
 {
     public class UserController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public UserController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         public async Task<IActionResult> Index()
         {
-            var Users = await userManager.Users.Select(u => new UserViewModel
+            var Users = await _userManager.Users.Select(u => new UserViewModel
             {
                 Id = u.Id,
                 UserName = u.UserName,
                 Email = u.Email,
                 DisplayName = u.DisplayName,
-                Roles = userManager.GetRolesAsync(u).Result
+                Roles = _userManager.GetRolesAsync(u).Result
             }).ToListAsync();
 
             return View(Users);
@@ -27,8 +27,8 @@ namespace AdminPanel.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            var user = await userManager.FindByIdAsync(id);
-            var AllRoles = await roleManager.Roles.ToListAsync();
+            var user = await _userManager.FindByIdAsync(id);
+            var AllRoles = await _roleManager.Roles.ToListAsync();
             var viewModel = new UserRolesViewModel()
             {
                 UserId = user.Id,
@@ -37,7 +37,7 @@ namespace AdminPanel.Controllers
                 {
                     Id = r.Id,
                     Name = r.Name,
-                    isSelected = userManager.IsInRoleAsync(user, r.Name).Result
+                    isSelected = _userManager.IsInRoleAsync(user, r.Name).Result
                 }).ToList(),
             };
 
@@ -46,17 +46,17 @@ namespace AdminPanel.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UserRolesViewModel model)
         {
-            var user = await userManager.FindByIdAsync(model.UserId);
-            var userRole = await userManager.GetRolesAsync(user);
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var userRole = await _userManager.GetRolesAsync(user);
             foreach (var role in model.Roles)
             {
                 if (userRole.Any(r => r == role.Name) && !role.isSelected)
                 {
-                    await userManager.RemoveFromRoleAsync(user, role.Name);
+                    await _userManager.RemoveFromRoleAsync(user, role.Name);
                 }
                 if (!userRole.Any(r => r == role.Name) && role.isSelected)
                 {
-                    await userManager.AddToRoleAsync(user, role.Name);
+                    await _userManager.AddToRoleAsync(user, role.Name);
                 }
 
             }
