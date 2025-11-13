@@ -1,5 +1,4 @@
-﻿
-namespace AdminPanel.Controllers
+﻿namespace AdminPanel.Controllers
 {
     public class UserController : Controller
     {
