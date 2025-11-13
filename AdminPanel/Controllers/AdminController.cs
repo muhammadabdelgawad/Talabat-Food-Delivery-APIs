@@ -27,6 +27,7 @@ namespace AdminPanel.Controllers
                 return RedirectToAction(nameof(Login));
             }
             var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
+
             if (!result.Succeeded && !await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 ModelState.AddModelError(string.Empty, "you are not authorized");
