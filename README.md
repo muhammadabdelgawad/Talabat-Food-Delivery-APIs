@@ -246,9 +246,5 @@ namespace Talabat.Infrastructure.Persistence._Data
 
 ## License Information
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License 
 
-## Contact/Support Information
-
-For any questions or issues, please contact: [Your Name/Organization]
-```
