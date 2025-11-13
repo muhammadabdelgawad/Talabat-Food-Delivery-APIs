@@ -1,161 +1,254 @@
-# Talabat Food Delivery APIs
+# Talabat-Food-Delivery-APIs
 
-This repository contains the APIs for a Talabat Food Delivery Application.
+This repository contains the backend APIs for a Talabat-like food delivery platform. The APIs are built using ASP.NET Core and leverage Entity Framework Core for data persistence with SQL Server.  Identity management is implemented using ASP.NET Identity.  Redis is used for basket management and Stripe for payments.
 
 ## Features and Functionality
 
 *   **Product Management:**
-    *   Browse a paginated list of products with filtering and sorting options (name, price, brand, category).
+    *   Fetch paginated lists of products with sorting, filtering by brand and category, and searching.
     *   Retrieve a specific product by its ID.
-    *   List available brands and categories.
-*   **Basket Management:**
-    *   Retrieve, update, and delete customer baskets using a unique basket ID.
-*   **Account Management:**
-    *   Register new users with display name, username, email, phone number, and password.
-    *   Login existing users using email and password.
-    *   Retrieve current user information (requires authentication).
-    *   Retrieve and update user address information (requires authentication).
-    *   Check if an email address already exists.
+    *   Retrieve lists of available brands and categories.
+*   **Shopping Basket:**
+    *   Retrieve, update, and delete customer baskets stored in Redis.
+    *   Handles item additions, quantities, and basket lifetime.
 *   **Order Management:**
-    *   Create new orders for authenticated users based on a basket ID and shipping address.
-    *   Retrieve orders for a specific user (requires authentication).
-    *   Retrieve a specific order by its ID (requires authentication).
-    *   List available delivery methods.
-*   **Error Handling:**
-    *   Comprehensive error handling using custom `ApiResponse` objects for various status codes (400, 401, 404, 500).
-    *   Custom exception middleware to handle exceptions like `NotFoundException`, `ValidationException`, `BadRequestException`, and `UnAuthorizedException`.
-    *   Model state validation for API requests.
+    *   Create orders for users.
+    *   Retrieve order history for a given user.
+    *   Retrieve a specific order by ID.
+    *   Fetch delivery methods.
+*   **Account Management:**
+    *   User registration with email confirmation, phone number confirmation, and password complexity validation.
+    *   User login and generation of JWT tokens for authentication.
+    *   Retrieval and updating of user addresses.
+    *   Email existence check.
+*   **Payment Integration:**
+    *   Create or update Stripe Payment Intents.
+    *   Webhooks to handle successful payments and other payment-related events.
 *   **Authentication and Authorization:**
-    *   JWT-based authentication for securing API endpoints.
-    *   Role-based authorization is possible but not implemented in the provided files.
-    *   Configuration of JWT settings via `jwtSettings` section in `appsettings.json` or similar.
+    *   Secured endpoints using JWT Bearer authentication.
+    *   Role-based authorization implemented in the Admin Panel.
+*   **Error Handling:**
+    *   Global exception handling middleware.
+    *   Custom API response structure for errors.
+    *   Detailed error logging in development environments.
+*   **Caching:**
+    *   Cache responses from product listing endpoint using Redis.
+*   **Admin Panel:**
+    *   Basic functionality for admin user login and logout.
+    *   Role management, including viewing, creating, editing, and deleting roles.
+    *   User management, including viewing and editing user roles.
 
 ## Technology Stack
 
-*   **.NET 9.0:**  (Inferred from the project structure and namespaces)
-*   **ASP.NET Core Web API:** For building RESTful APIs.
-*   **Entity Framework Core:**  ORM for database interactions (SQL Server).
-*   **Microsoft.AspNetCore.Identity:**  For identity and access management.
-*   **StackExchange.Redis:**  For basket management.
-*   **AutoMapper:** For object-to-object mapping.
-*   **JWT (JSON Web Tokens):** For authentication.
-*   **SQL Server:** Relational database for product, order and identity information.
+*   ASP.NET Core 8.0
+*   Entity Framework Core 8.0
+*   SQL Server
+*   ASP.NET Core Identity
+*   JWT Authentication
+*   StackExchange.Redis
+*   Stripe.net
+*   AutoMapper
 
 ## Prerequisites
 
-*   .NET SDK 9.0 or later.
-*   SQL Server instance.
-*   Redis server instance.
+*   .NET 8.0 SDK
+*   SQL Server
+*   Redis Server (optional, for caching and basket management)
+*   Stripe Account (for payment processing)
 
 ## Installation Instructions
 
-1.  **Clone the repository:**
+1.  Clone the repository:
 
     ```bash
     git clone https://github.com/muhammadabdelgawad/Talabat-Food-Delivery-APIs.git
     cd Talabat-Food-Delivery-APIs
     ```
 
-2.  **Configure Database Connections:**
+2.  Configure Database Connections:
 
-    *   Modify the connection strings in `Talabat.APIs/appsettings.json` (or `appsettings.Development.json`) for both `StoreConnection` (for product and order data) and `IdentityConnection` (for user data):
-
+    *   Open `AdminPanel/appsettings.json` and `Talabat.APIs/appsettings.json`
+    *   Modify the `ConnectionStrings` section to point to your SQL Server instance.  Ensure the `IdentityConnection` and `StoreConnection` strings are correctly configured.  For example:
         ```json
-        {
-          "ConnectionStrings": {
-            "StoreConnection": "Server=YOUR_SERVER;Database=TalabatStoreDB;Trusted_Connection=True;MultipleActiveResultSets=true",
-            "IdentityConnection": "Server=YOUR_SERVER;Database=TalabatIdentityDB;Trusted_Connection=True;MultipleActiveResultSets=true",
+        "ConnectionStrings": {
+            "IdentityConnection": "Server=your_server;Database=TalabatIdentity;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
+            "StoreConnection": "Server=your_server;Database=TalabatStore;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
             "Redis": "localhost"
-          },
-          // ... rest of settings
         }
         ```
 
-        Replace `YOUR_SERVER` with the actual server address of your SQL Server instance. If you are using SQL Express on your local machine, it is usually `(localdb)\MSSQLLocalDB`.
+3.  Configure Redis Connection:
 
-        Ensure that Redis server is running and accessible. If not, configure the host in the `Redis` connection string.
+    *   In `Talabat.APIs/appsettings.json`, ensure the `Redis` connection string points to your Redis server. For example:
 
-3.  **Apply Migrations:**
+        ```json
+          "ConnectionStrings": {            
+            "Redis": "localhost"
+          },
+         ```
+    * In  `Talabat.APIs/appsettings.json`, configure `TimeToLiveInDays` in `RedisSettings` section. For example:
+       ```json
+        "RedisSettings": {
+            "TimeToLiveInDays": 30
+        }
+       ```
 
-    Open a terminal in the `Talabat.Infrastructure.Persistence` directory and run the following commands:
+4.  Configure Stripe API Keys:
 
-    ```bash
-    dotnet ef database update -c StoreDbContext
-    dotnet ef database update -c StoreIdentityDbConetxt
-    ```
-    These commands will create the necessary databases and tables based on the Entity Framework Core models.
+    *   In `Talabat.APIs/appsettings.json`, configure your Stripe Secret Key:
 
-4.  **Run the Application:**
+        ```json
+         "StripeSettings": {
+           "SecretKey": "your_stripe_secret_key"
+         }
+        ```
 
-    Navigate to the `Talabat.APIs` directory and run the application:
+5.  Apply Database Migrations:
 
-    ```bash
-    dotnet run
-    ```
+    *   Open a terminal in the `Talabat.Infrastructure.Persistence` directory.
+    *   Run the following commands:
+
+        ```bash
+        dotnet ef database update -c StoreDbContext
+        dotnet ef database update -c StoreIdentityDbConetxt
+        ```
+
+6.  Run the application:
+
+    *   Open a terminal in the `Talabat.APIs` directory.
+    *   Run the following command:
+
+        ```bash
+        dotnet run
+        ```
+    *   Open a terminal in the `AdminPanel` directory.
+    *   Run the following command:
+
+        ```bash
+        dotnet run
+        ```
 
 ## Usage Guide
 
-The API endpoints can be accessed through tools like Postman, Swagger UI, or any HTTP client.  By default, the application will run on `https://localhost:5001`.  Swagger UI is enabled in development mode, which can be accessed by browsing to `https://localhost:5001/swagger`.
+The API endpoints are structured around resources like products, baskets, orders, and accounts. Here's a basic guide:
 
 ### Authentication
 
-The `AccountController` provides endpoints for user registration and login.  Successful login will return a `UserDto` containing a JWT token. This token must be included in the `Authorization` header (Bearer scheme) for accessing protected endpoints.
+*   **Register:** `POST /api/Account/register`
+    *   Requires a JSON payload with `DisplayName`, `UserName`, `Email`, `PhoneNumber`, and `Password`.
+*   **Login:** `POST /api/Account/login`
+    *   Requires a JSON payload with `Email` and `Password`.
+    *   Returns a `UserDto` containing user information and a JWT `Token`.
+*   **Accessing Secured Endpoints:**  Include the `Authorization: Bearer <token>` header with the JWT token obtained during login.
 
 ### Products
 
-*   `GET /api/Products`: Retrieves a paginated list of products.  Query parameters can be used to filter, sort, and paginate the results.
-    *   `sort`: Sorting criteria (e.g., `priceAsc`, `priceDesc`).
-    *   `brandId`: Filter by brand ID.
-    *   `categoryId`: Filter by category ID.
-    *   `pageIndex`: Page number.
-    *   `pageSize`: Number of items per page.
-    *   `search`: Search term for product name.
-*   `GET /api/Products/{id}`: Retrieves a specific product by its ID.
-*   `GET /api/Products/brands`: Retrieves all product brands.
-*   `GET /api/Products/categories`: Retrieves all product categories.
+*   **Get Products:** `GET /api/Products`
+    *   Supports pagination, sorting, and filtering via query parameters.
+    *   Example: `GET /api/Products?sort=priceAsc&brandId=1&categoryId=2&pageIndex=2&pageSize=10&search=Laptop`
+*   **Get Product by ID:** `GET /api/Products/{id}`
+*   **Get Brands:** `GET /api/Products/brands`
+*   **Get Categories:** `GET /api/Products/categories`
 
 ### Basket
 
-*   `GET /api/Basket?id={id}`: Retrieves a customer basket by its ID.
-*   `POST /api/Basket`: Updates a customer basket.  The request body should contain a `BasketDto`.
-*   `DELETE /api/Basket?id={id}`: Deletes a customer basket by its ID.
-
-### Account
-
-*   `POST /api/Account/register`: Registers a new user. The request body should contain a `RegisterDto`.
-*   `POST /api/Account/login`: Logs in an existing user. The request body should contain a `LoginDto`.
-*   `GET /api/Account`: Retrieves the current user. Requires authentication.
-*   `GET /api/Account/address`: Retrieves the user's address. Requires authentication.
-*   `PUT /api/Account/address`: Updates the user's address. The request body should contain an `AddressDto`. Requires authentication.
-*   `GET /api/Account/emailexisits?email={email}`: Checks if an email exists.
+*   **Get Basket:** `GET /api/Basket?id={basketId}`
+*   **Update Basket:** `POST /api/Basket`
+    *   Requires a JSON payload with `Id` and `Items` (list of `BasketItemDto`).
+*   **Delete Basket:** `DELETE /api/Basket?id={basketId}`
 
 ### Orders
 
-*   `POST /api/Orders`: Creates a new order. The request body should contain an `OrderToCreateDto`. Requires authentication.
-*   `GET /api/Orders`: Retrieves orders for the authenticated user. Requires authentication.
-*   `GET /api/Orders/{id}`: Retrieves a specific order by ID for the authenticated user. Requires authentication.
-*   `GET /api/Orders/delivery`: Retrieves all delivery methods.
+*   **Create Order:** `POST /api/Orders`
+    *   Requires a JSON payload with `BasketId`, `DeliveryMethodId`, and `ShippingAddress` (AddressDto). Requires JWT authentication.
+*   **Get Orders for User:** `GET /api/Orders`
+    *   Requires JWT authentication.
+*   **Get Order by ID:** `GET /api/Orders/{id}`
+    *   Requires JWT authentication.
+*   **Get Delivery Methods:** `GET /api/Orders/delivery`
 
-### Example API Request (Get Products)
+### Account
 
-```
-GET https://localhost:5001/api/Products?pageSize=10&pageIndex=1&sort=priceAsc&brandId=2
-```
+*   **Get Current User:** `GET /api/Account`
+    *   Requires JWT authentication.
+*   **Get User Address:** `GET /api/Account/address`
+    *   Requires JWT authentication.
+*   **Update User Address:** `PUT /api/Account/address`
+    *   Requires a JSON payload with address details (`AddressDto`). Requires JWT authentication.
 
-This request retrieves the first page of products (10 items per page), sorted by price in ascending order, and filtered by brand ID 2.
+### Admin Panel
+
+1.  Navigate to the Admin Panel URL (default pattern is `https://localhost:<port>/Admin/Login`).
+2.  Log in with a valid admin user's credentials. (Default seeding does not have an admin. You will need to manually create one.  See Contributing Guide below.)
+3.  The Admin Panel offers interfaces for managing roles and users.
 
 ## API Documentation
 
-The API is self-documenting using Swagger UI, which is available in development environments.  Browse to `https://localhost:5001/swagger` after running the application.
+Swagger UI is enabled in the development environment.  Navigate to `https://localhost:<port>/swagger` to view the API documentation and interact with the endpoints.
 
 ## Contributing Guidelines
 
+Contributions are welcome! Please follow these guidelines:
+
 1.  Fork the repository.
 2.  Create a new branch for your feature or bug fix.
-3.  Implement your changes and write appropriate tests.
-4.  Ensure that all tests pass.
-5.  Submit a pull request with a clear description of your changes.
+3.  Implement your changes.
+4.  Test your changes thoroughly.
+5.  Create a pull request with a clear description of your changes.
+
+### Creating an Admin User
+The default database seeding in `StoreIdentityDbInitializer.cs` does NOT create an admin user. You will need to create one programmatically using the `UserManager` in the `Program.cs` or a dedicated seeding class.
+
+1.  **Modify `StoreIdentityDbInitializer.cs`**:
+    Add the necessary code to create an Admin role and assign an existing user to the role, or create a new admin user. The following is only an example and should be adjusted to best fit your configuration.
+
+```csharp
+using Microsoft.AspNetCore.Identity;
+using Talabat.Domain.Entities.Identity;
+using Talabat.Infrastructure.Persistence._Identity;
+
+namespace Talabat.Infrastructure.Persistence._Data
+{
+    public class StoreIdentityDbInitializer(StoreIdentityDbConetxt _dbContext, UserManager<ApplicationUser> _userManager, RoleManager<IdentityRole> _roleManager) : DbInitializer(_dbContext), IStoreIdentityInializer
+    {
+        public override async Task SeedAsync()
+        {
+            if (!_roleManager.Roles.Any())
+            {
+                await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+            }
+
+
+            if (!_userManager.Users.Any())
+            {
+                var adminUser = new ApplicationUser
+                {
+                    DisplayName = "Admin User",
+                    UserName = "admin",
+                    Email = "admin@test.com",
+                    PhoneNumber = "00000000000",
+                };
+
+                await _userManager.CreateAsync(adminUser, "Pa$$w0rd");
+
+                var user = await _userManager.FindByEmailAsync("admin@test.com");
+                if (user != null)
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
+        }
+    }
+}
+```
+2. Call the InitializeDbAsync() from Program.cs. Now the Admin user is registered, you can run the migrations and then the application.
+
 
 ## License Information
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact/Support Information
+
+For any questions or issues, please contact: [Your Name/Organization]
+```
