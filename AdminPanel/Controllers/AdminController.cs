@@ -1,12 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Talabat.Application.Abstraction.Models.Auth;
 
 namespace AdminPanel.Controllers
 {
     public class AdminController : Controller
     {
-        public IActionResult Index()
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+
+        public AdminController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        {
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+        }
+        public IActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto login)
+        {
+            var user = await userManager.FindByEmailAsync(login.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("Email", "Invalid Email");
+                return RedirectToAction(nameof(Login));
+            }
+            var result = await signInManager.CheckPasswordSignInAsync(user, login.Password, false);
+            if (!result.Succeeded && !await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                ModelState.AddModelError(string.Empty, "you are not authorized");
+                return RedirectToAction(nameof(Login));
+            }
+            else
+                return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
         }
     }
 }
