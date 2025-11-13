@@ -1,6 +1,6 @@
-# Talabat-Food-Delivery-APIs
+# Talabat Food Delivery -APIs
 
-This repository contains the backend APIs for a Talabat-like food delivery platform. The APIs are built using ASP.NET Core and leverage Entity Framework Core for data persistence with SQL Server.  Identity management is implemented using ASP.NET Identity.  Redis is used for basket management and Stripe for payments.
+This repository contains the backend APIs for a Talabat-like food delivery platform. The APIs are built using ASP.NET Core and Entity Framework Core for data persistence with SQL Server.  Identity management is implemented using ASP.NET Identity.  Redis is used for basket management and Stripe for payments.
 
 ## Features and Functionality
 
@@ -40,8 +40,8 @@ This repository contains the backend APIs for a Talabat-like food delivery platf
 
 ## Technology Stack
 
-*   ASP.NET Core 8.0
-*   Entity Framework Core 8.0
+*   ASP.NET Core 9.0
+*   Entity Framework Core 9.0
 *   SQL Server
 *   ASP.NET Core Identity
 *   JWT Authentication
@@ -51,7 +51,7 @@ This repository contains the backend APIs for a Talabat-like food delivery platf
 
 ## Prerequisites
 
-*   .NET 8.0 SDK
+*   .NET 9.0 SDK
 *   SQL Server
 *   Redis Server (optional, for caching and basket management)
 *   Stripe Account (for payment processing)
