@@ -1,0 +1,243 @@
+@using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor
+@using Talabat.Application.Abstraction.Models.Auth
+@model LoginDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Login - Talabat Admin</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        /* Enhanced color scheme and modern styling */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%) !important;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .enhanced-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1) !important;
+            transition: transform 0.3s ease;
+        }
+        
+        .enhanced-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .enhanced-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff9ff3 100%) !important;
+            color: white !important;
+            border: none !important;
+            text-align: center;
+            padding: 2.5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .enhanced-header h3 {
+            font-size: 2.2rem !important;
+            font-weight: 300 !important;
+            margin: 0 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .admin-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+        
+        .admin-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .enhanced-body {
+            padding: 2.5rem !important;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+        }
+        
+        .form-floating {
+            margin-bottom: 1.5rem;
+        }
+        
+        .enhanced-form-control {
+            border: 2px solid #e3f2fd !important;
+            border-radius: 12px !important;
+            padding: 1rem 1.25rem !important;
+            font-size: 1rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%) !important;
+        }
+        
+        .enhanced-form-control:focus {
+            border-color: #ff6b6b !important;
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 107, 0.15), 0 8px 25px rgba(255, 107, 107, 0.1) !important;
+            background: #ffffff !important;
+            transform: translateY(-2px);
+        }
+        
+        .form-floating label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .enhanced-form-control:focus + label {
+            color: #ff6b6b !important;
+        }
+        
+        .enhanced-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 50%, #ff9ff3 100%) !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 1rem 2rem !important;
+            font-size: 1.1rem !important;
+            font-weight: 600 !important;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .enhanced-btn:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4) !important;
+            background: linear-gradient(135deg, #ff5252 0%, #d84315 50%, #e91e63 100%) !important;
+        }
+        
+        .enhanced-btn:active {
+            transform: translateY(-1px) !important;
+        }
+        
+        .validation-message {
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        
+        /* Floating animation elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .floating-circle:nth-child(1) {
+            width: 120px;
+            height: 120px;
+            top: 15%;
+            left: 10%;
+        }
+        
+        .floating-circle:nth-child(2) {
+            width: 80px;
+            height: 80px;
+            top: 60%;
+            right: 15%;
+        }
+        
+        .floating-circle:nth-child(3) {
+            width: 200px;
+            height: 200px;
+            top: 40%;
+            left: 70%;
+        }
+        
+        /* Responsive design using regular CSS */
+        .responsive-adjustments {
+            /* Mobile styles will be handled with media queries in external CSS or inline */
+        }
+    </style>
+</head>
+<body class="bg-primary">
+    <!-- Floating background elements -->
+    <div class="floating-elements">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+    </div>
+
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card enhanced-card shadow-lg border-0 rounded-lg mt-5">
+                                <div class="card-header enhanced-header">
+                                    <i class="fas fa-user-shield admin-icon"></i>
+                                    <h3 class="text-center font-weight-light my-4">Admin Portal</h3>
+                                    <p class="welcome-text">Welcome to Talabat Admin Panel</p>
+                                </div>
+                                <div class="card-body enhanced-body">
+                                    <form method="post" asp-action="Login">
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control enhanced-form-control" id="inputEmail" type="email" placeholder="name@example.com" asp-for="Email" />
+                                            <label for="inputEmail" asp-for="Email">
+                                                <i class="fas fa-envelope me-2 text-muted"></i>Email Address
+                                            </label>
+                                            <span asp-validation-for="Email" class="validation-message"></span>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control enhanced-form-control" id="inputPassword" type="password" placeholder="Password" asp-for="Password" />
+                                            <label for="inputPassword" asp-for="Password">
+                                                <i class="fas fa-lock me-2 text-muted"></i>Password
+                                            </label>
+                                            <span asp-validation-for="Password" class="validation-message"></span>
+                                        </div>
+                                        <div class="d-grid mt-4 mb-0">
+                                            <button class="btn btn-primary enhanced-btn" type="submit">
+                                                <i class="fas fa-sign-in-alt me-2"></i>
+                                                Sign In
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+</body>
+</html>

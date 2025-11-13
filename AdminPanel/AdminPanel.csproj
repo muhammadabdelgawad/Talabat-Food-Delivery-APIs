@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Talabat.APIs\Talabat.APIs.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Admin\" />
-  </ItemGroup>
-
 </Project>
